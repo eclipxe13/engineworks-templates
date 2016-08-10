@@ -13,6 +13,7 @@ class HtmlEscape implements Plugin
         return [
             'e' => 'html',
             'js' => 'javascript',
+            'ejs' => 'javascriptInHtml',
             'uri' => 'uri',
             'url' => 'url',
             'qry' => 'query',
@@ -39,6 +40,11 @@ class HtmlEscape implements Plugin
             ['\\\\', "\\'", '\\"', '\\r', '\\n', '\\t', '\\f'],
             $string
         );
+    }
+
+    public function javascriptInHtml($string)
+    {
+        return $this->javascript($this->html($string));
     }
 
     public function uri($string)

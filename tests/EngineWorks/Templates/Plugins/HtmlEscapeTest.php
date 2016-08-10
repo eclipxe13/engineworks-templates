@@ -14,7 +14,7 @@ class HtmlEscapeTest extends TestCase
 
     public function testCallablesTable()
     {
-        $expectedTableNames = ['e', 'js', 'uri', 'url', 'qry'];
+        $expectedTableNames = ['e', 'js', 'ejs', 'uri', 'url', 'qry'];
         $html = new HtmlEscape();
         $table = $html->getCallablesTable();
         foreach ($expectedTableNames as $name) {
@@ -48,6 +48,14 @@ class HtmlEscapeTest extends TestCase
 
         $html = new HtmlEscape();
         $this->assertSame($expected, $html->javascript($text));
+    }
+
+    public function testJavascriptInHtml()
+    {
+        $text = "x = '1'; y = \"2\";";
+        $expected = "x = \\'1\\'; y = &quot;2&quot;;";
+        $html = new HtmlEscape();
+        $this->assertSame($expected, $html->javascriptInHtml($text));
     }
 
     public function testUri()
