@@ -84,7 +84,7 @@ class CallablesTest extends TestCase
         $this->assertNull($this->callables->get('y'));
     }
 
-    public function testAttatchAll()
+    public function testAttachAll()
     {
         $html = new HtmlEscape();
         $transliterate = new Transliterate();
@@ -93,7 +93,7 @@ class CallablesTest extends TestCase
             array_keys($transliterate->getCallablesTable())
         );
 
-        $this->callables->attatchAll([
+        $this->callables->attachAll([
             $html,
             null,
             $transliterate,
@@ -104,12 +104,12 @@ class CallablesTest extends TestCase
         $this->assertEquals($expectedTable, $this->callables->names());
     }
 
-    public function testAttatchDetatch()
+    public function testAttachDetach()
     {
         $plugin = new HtmlEscape();
-        $this->callables->attatch($plugin);
+        $this->callables->attach($plugin);
         $this->assertSame(array_keys($plugin->getCallablesTable()), $this->callables->names());
-        $this->callables->detatch($plugin);
+        $this->callables->detach($plugin);
         $this->assertCount(0, $this->callables);
     }
 
