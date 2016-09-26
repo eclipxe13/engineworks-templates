@@ -23,7 +23,9 @@
         "squizlabs/php_codesniffer": "@stable",
         "jakub-onderka/php-parallel-lint": "@stable",
         "slim/slim": "@stable",
-        "psr/http-message": "@stable"
+        "psr/http-message": "@stable",
+        "scrutinizer/ocular": "@stable",
+        "satooshi/php-coveralls": "@stable"
     },
     "autoload": {
         "psr-4": {
