@@ -1,5 +1,5 @@
 <?php
-namespace EngineWorks\Slim;
+namespace EngineWorks\Templates\Slim;
 
 use EngineWorks\Templates\Plugin;
 use Slim\Interfaces\RouterInterface;
