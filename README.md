@@ -155,11 +155,12 @@ Take a look in the TODO section.
 
 - [X] Release first stable version
 - [X] Publish on github & packagist
-- [ ] Add library tools
-    - [ ] Travis
-    - [ ] Scrutinizer
-    - [ ] Insight Sensiolabs
-    - [ ] Coveralls
+- [X] Add library tools
+    - [X] Travis
+    - [X] Scrutinizer
+    - [X] Insight Sensiolabs
+    - [X] Coveralls
+- [ ] Include widgets
 - [ ] Document all the things!
 
 ## Copyright and License
@@ -175,7 +176,7 @@ and licensed for use under the MIT License (MIT). Please see [LICENSE][] for mor
 [license]: https://github.com/eclipxe13/engineworks-templates/blob/master/LICENSE
 [build]: https://travis-ci.org/eclipxe13/engineworks-templates
 [quality]: https://scrutinizer-ci.com/g/eclipxe13/engineworks-templates/
-[sensiolabs]: https://insight.sensiolabs.com/projects/eeb7099d-e35d-4acb-8ce2-457004a47913
+[sensiolabs]: https://insight.sensiolabs.com/projects/78579b64-f74b-46a6-a614-0b9a66e59c0a
 [coverage]: https://coveralls.io/github/eclipxe13/engineworks-templates?branch=master
 [downloads]: https://packagist.org/packages/eclipxe/engineworks-templates
 
@@ -184,6 +185,6 @@ and licensed for use under the MIT License (MIT). Please see [LICENSE][] for mor
 [badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
 [badge-build]: https://img.shields.io/travis/eclipxe13/engineworks-templates.svg?style=flat-square
 [badge-quality]: https://img.shields.io/scrutinizer/g/eclipxe13/engineworks-templates/master.svg?style=flat-square
-[badge-sensiolabs]: https://img.shields.io/sensiolabs/i/eeb7099d-e35d-4acb-8ce2-457004a47913.svg?style=flat-square
+[badge-sensiolabs]: https://img.shields.io/sensiolabs/i/78579b64-f74b-46a6-a614-0b9a66e59c0a.svg?style=flat-square
 [badge-coverage]: https://coveralls.io/repos/github/eclipxe13/engineworks-templates/badge.svg?branch=master
 [badge-downloads]: https://img.shields.io/packagist/dt/eclipxe/engineworks-templates.svg?style=flat-square
