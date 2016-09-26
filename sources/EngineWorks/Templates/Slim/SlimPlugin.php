@@ -1,8 +1,8 @@
 <?php
 namespace EngineWorks\Slim;
 
-use Slim\Interfaces\RouterInterface;
 use EngineWorks\Templates\Plugin;
+use Slim\Interfaces\RouterInterface;
 
 class SlimPlugin implements Plugin
 {
@@ -32,7 +32,7 @@ class SlimPlugin implements Plugin
     public function __construct(RouterInterface $router, $baseUrl)
     {
         if (! is_string($baseUrl)) {
-            throw new \InvalidArgumentException("baseUrl must be a string or an Uri instance");
+            throw new \InvalidArgumentException('baseUrl must be a string');
         }
         $this->router = $router;
         $this->baseUrl = $baseUrl;
