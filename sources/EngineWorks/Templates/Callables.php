@@ -73,27 +73,27 @@ class Callables implements \Countable
     }
 
     /**
-     * Attatch an array of plugins. Is a shortcut to call several times to attatch method
+     * Attach an array of plugins. Is a shortcut to call several times to attatch method
      * If an element of the array is not a plugin then the element is discarded without notice
      *
      * @param Plugin[] $plugins
      */
-    public function attatchAll(array $plugins)
+    public function attachAll(array $plugins)
     {
         foreach ($plugins as $plugin) {
             if (! ($plugin instanceof Plugin)) {
                 continue;
             }
-            $this->attatch($plugin);
+            $this->attach($plugin);
         }
     }
 
     /**
-     * Attatch all the functions offered by the plugin
+     * Attach all the functions offered by the plugin
      *
      * @param Plugin $plugin
      */
-    public function attatch(Plugin $plugin)
+    public function attach(Plugin $plugin)
     {
         foreach ($plugin->getCallablesTable() as $name => $callable) {
             $this->add($name, [$plugin, $callable]);
@@ -105,7 +105,7 @@ class Callables implements \Countable
      *
      * @param Plugin $plugin
      */
-    public function detatch(Plugin $plugin)
+    public function detach(Plugin $plugin)
     {
         foreach (array_keys($plugin->getCallablesTable()) as $name) {
             $this->remove($name);

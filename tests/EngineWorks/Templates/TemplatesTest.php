@@ -4,6 +4,7 @@ namespace Tests\EngineWorks\Templates;
 use EngineWorks\Templates\Callables;
 use EngineWorks\Templates\Templates;
 use PHPUnit\Framework\TestCase;
+use Slim\Http\Response;
 
 class TemplatesTest extends TestCase
 {
@@ -75,5 +76,20 @@ class TemplatesTest extends TestCase
         $expectedContent = '-- Hello world --';
         $content = $this->templates->fetch('hello-world');
         $this->assertEquals($expectedContent, $content);
+    }
+
+    public function testRender()
+    {
+        // use the Slim Response implementation
+        $response = new Response();
+
+        // same as templateTest::samplesFile
+        $path = realpath(__DIR__ . '/../../samples');
+        $this->templates->setDirectory($path);
+        $this->templates->setExtension('php');
+
+        $expectedContent = '-- Hello Response --';
+        $response = $this->templates->render($response, 'hello-somebody', ['name' => 'Response']);
+        $this->assertEquals($expectedContent, $response->getBody());
     }
 }

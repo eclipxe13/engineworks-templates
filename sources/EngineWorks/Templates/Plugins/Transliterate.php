@@ -129,6 +129,12 @@ class Transliterate implements Plugin
         $this->defaultEncoder = $defaultEncoder;
     }
 
+    /**
+     * Function to setup a null encoder
+     *
+     * @param string $string
+     * @return string mixed
+     */
     public static function nullEncoder($string)
     {
         return $string;
