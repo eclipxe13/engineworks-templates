@@ -14,13 +14,28 @@ class TemplateTest extends TestCase
         $this->assertInstanceOf(Callables::class, $template->callables());
     }
 
-    public function testIsValidTemplateFilename()
+    public function testIsValidTemplateFilenameDirectory()
     {
         $template = new Template();
-
         $this->assertFalse($template->isValidTemplateFilename(__DIR__));
+    }
+
+    public function testIsValidTemplateFilenameNotExistent()
+    {
+        $template = new Template();
         $this->assertFalse($template->isValidTemplateFilename(__DIR__ . '/does-not-exists.txt'));
-        $this->assertFalse($template->isValidTemplateFilename('/dev/console'));
+    }
+
+    public function testIsValidTemplateFilenameNotReadable()
+    {
+        $template = new Template();
+        $tempfile = tempnam(null, null);
+        chmod($tempfile, 0);
+
+        $this->assertFalse($template->isValidTemplateFilename($tempfile), 'Testing not readable return true');
+
+        chmod($tempfile, 0600);
+        unlink($tempfile);
     }
 
     public function testStaticHello()
