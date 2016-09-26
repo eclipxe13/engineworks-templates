@@ -1,3 +1,7 @@
+# version 1.0.1
+- Looks like I should not test readable against '/dev/console', travis consider the file as readable
+- Improve the test to avoid build failure
+
 # version 1.0.0
 - Rename project as eclipxe/engineworks-templates and make it available under packagist
 - Rename methods attach, attachAll, detach because of typos (they ended with -tch)
