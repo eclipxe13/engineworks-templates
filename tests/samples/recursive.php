@@ -1,13 +1,11 @@
 <?php
 
-/* @var $templates \EngineWorks\Templates\Templates */
+/* @var $this \EngineWorks\Templates\Template */
 /* @var $value int */
 
 echo "$value\n";
-$maxvalue = 10;
-if ($value < $maxvalue) {
-    echo $templates->fetch('recursive', [
-        'templates' => $templates,
-        'value' => $value + 1
+if ($value < 10) {
+    echo $this->fetch('recursive', [
+        'value' => $value + 1,
     ]);
 }
