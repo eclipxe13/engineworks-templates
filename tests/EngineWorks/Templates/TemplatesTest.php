@@ -92,4 +92,15 @@ class TemplatesTest extends TestCase
         $response = $this->templates->render($response, 'hello-somebody', ['name' => 'Response']);
         $this->assertEquals($expectedContent, $response->getBody());
     }
+
+    public function testFetchRecursive()
+    {
+        $templates = new Templates(Utils::samples());
+        $fetched = $templates->fetch('recursive', [
+            'templates' => $templates,
+            'value' => 1,
+        ]);
+        $expected = implode("\n", range(1, 10)) . "\n";
+        $this->assertEquals($expected, $fetched);
+    }
 }
