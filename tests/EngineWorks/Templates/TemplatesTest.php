@@ -69,7 +69,7 @@ class TemplatesTest extends TestCase
     public function testFetchUsingStaticHelloWorldSample()
     {
         // same as templateTest::samplesFile
-        $path = realpath(__DIR__ . '/../../samples');
+        $path = realpath(Utils::samples());
         $this->templates->setDirectory($path);
         $this->templates->setExtension('php');
 
@@ -84,7 +84,7 @@ class TemplatesTest extends TestCase
         $response = new Response();
 
         // same as templateTest::samplesFile
-        $path = realpath(__DIR__ . '/../../samples');
+        $path = Utils::samples();
         $this->templates->setDirectory($path);
         $this->templates->setExtension('php');
 

@@ -91,7 +91,7 @@ class TemplateTest extends TestCase
      */
     private function samplesFile($filename = '')
     {
-        $path = realpath(__DIR__ . '/../../samples');
+        $path = Utils::samples();
         return $path . (('' !== $filename) ? '/' . $filename : '');
     }
 }
