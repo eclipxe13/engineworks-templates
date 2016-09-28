@@ -22,7 +22,7 @@ Use composer to install this library `composer require eclipxe/engineworks-templ
 # Basic use
 
 ```php
-namespace EngineWorks\Templates;
+<?php namespace EngineWorks\Templates;
 
 // create callables
 $callables = new Callables();
@@ -32,15 +32,18 @@ $callables->attachAll([
     new Plugins\Transliterate(),
 ]);
 
-// create templates
-$templates = new Templates(__DIR__ . '/../templates', $callables);
+// create resolver
+$resolver = new Resolver(__DIR__ . '/templates');
 
-// fetch the content of a template
+// create templates
+$templates = new Templates($callables, $resolver);
+
+// fetch the content of a template (templates/user-details.php)
+/* @var $user array */
 $content = $templates->fetch('user-details', ['user' => $user]);
 
-// do whatever with the response, in the folowing case I will create a PSR-7 Response
-$response = new Response();
-$response->getBody()->write($content);
+// do whatever with the response, I will just echo it
+echo $content;
 ```
 
 ## EngineWorks\Templates\Templates
@@ -56,14 +59,12 @@ Then will call `fetch` on that template.
 ## EngineWorks\Templates\Template
 
 This is the main class of the library, it can be created stand alone
-or by `Templates::create` (non-static).
-
-A `Template` has a read-only property accesible by `callables()` method.
-It is not a good idea to implement the magic method `__get` for only this property.
+or by `Templates::create` (non-static call).
 
 ### EngineWorks\Templates\Template::fetch
 
-`fetch` method receives two arguments, a filename and a variables array.
+`fetch` method receives two arguments, a template name and a variables array.
+ It will resolve the file name using the Resolver object.
  It will convert the array to variables (using `extract`) in order to make accesible this variables to the file.
  
 # Inside the template
@@ -86,9 +87,15 @@ was attatched with the following functions:
 
 So, you can use those functions using `$this` inside your template.
 
-This is a template example `users-list.php`:
+Also, you can use the `fetch` method to retrieve the content of another template.
+
+This is a template example `templates/users-list.php`:
 
 ```php
+<?php
+/* @var $pagename string */
+/* @var $users array */
+?>
 <h1><?=$this->e($pagename)?></h1>
 <ul>
 <?php foreach ($users as $user): ?>
@@ -100,6 +107,8 @@ This is a template example `users-list.php`:
 This is the templates call:
 
 ```php
+<?php
+/* @var $templates \EngineWorks\Templates\Templates */
 $templates->fetch('users-list', [
     'pagename' => 'List of users & members',
     'users' => [
@@ -137,10 +146,11 @@ To use this library in Slim 3 we provide a plugin named `SlimPlugin` that offers
 This is a common code to attach the plugin into the `Callables` collection:
 
 ```php
+<?php
 /* @var $callables \EngineWorks\Templates\Callables */
 /* @var $container['router'] \Slim\Interfaces\RouterInterface */
 /* @var $request \Slim\Http\Request */
-$callables->attach(new \EngineWorks\Slim\SlimPlugin(
+$callables->attach(new \EngineWorks\Templates\Slim\SlimPlugin(
     $container['router'],
     $request->getUri()->getBasePath()
 ));
@@ -160,7 +170,8 @@ Take a look in the TODO section.
     - [X] Scrutinizer
     - [X] Insight Sensiolabs
     - [X] Coveralls
-- [ ] Include widgets
+- [X] ~~Include widgets~~
+- [X] Implement Resolver class to resolve the location of a template file
 - [ ] Document all the things!
 
 ## Copyright and License

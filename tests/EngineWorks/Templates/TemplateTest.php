@@ -2,6 +2,7 @@
 namespace Tests\EngineWorks\Templates;
 
 use EngineWorks\Templates\Callables;
+use EngineWorks\Templates\Resolver;
 use EngineWorks\Templates\Template;
 use PHPUnit\Framework\TestCase;
 
@@ -12,6 +13,7 @@ class TemplateTest extends TestCase
         $template = new Template();
 
         $this->assertInstanceOf(Callables::class, $template->callables());
+        $this->assertInstanceOf(Resolver::class, $template->resolver());
     }
 
     public function testIsValidTemplateFilenameDirectory()
@@ -42,7 +44,7 @@ class TemplateTest extends TestCase
     {
         $expectedContent = '-- Hello world --';
         $template = new Template();
-        $content = $template->fetch($this->samplesFile('hello-world.php'));
+        $content = $template->fetch(Utils::samples('hello-world'));
         $this->assertEquals($expectedContent, $content);
     }
 
@@ -50,7 +52,7 @@ class TemplateTest extends TestCase
     {
         $expectedContent = '-- Hello Carlos --';
         $template = new Template();
-        $content = $template->fetch($this->samplesFile('hello-somebody.php'), ['name' => 'Carlos']);
+        $content = $template->fetch(Utils::samples('hello-somebody'), ['name' => 'Carlos']);
         $this->assertEquals($expectedContent, $content);
     }
 
@@ -58,7 +60,7 @@ class TemplateTest extends TestCase
     {
         $expectedContent = '-- Hello world --';
         $template = new Template();
-        $content = $template->fetch($this->samplesFile('hello-world.php'), ['templateFilename' => 'x']);
+        $content = $template->fetch(Utils::samples('hello-world'), ['templateFilename' => 'x']);
         $this->assertEquals($expectedContent, $content);
     }
 
@@ -68,30 +70,18 @@ class TemplateTest extends TestCase
         $template = new Template();
         $template->callables()->add('x', 'strtoupper');
 
-        $content = $template->fetch($this->samplesFile('hello-callable.php'), ['name' => 'Carlos']);
+        $content = $template->fetch(Utils::samples('hello-callable'), ['name' => 'Carlos']);
         $this->assertEquals($expectedContent, $content);
     }
 
     public function testWithInvalidTemplateFile()
     {
-        $filename = 'non-existent.php';
+        $filename = 'non-existent';
         $template = new Template();
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage("Template $filename does not exists");
+        $this->expectExceptionMessageRegExp('/Template .* does not exists/');
 
         $template->fetch($filename);
-    }
-
-    /**
-     * Helper function
-     *
-     * @param string $filename
-     * @return string
-     */
-    private function samplesFile($filename = '')
-    {
-        $path = realpath(__DIR__ . '/../../samples');
-        return $path . (('' !== $filename) ? '/' . $filename : '');
     }
 }

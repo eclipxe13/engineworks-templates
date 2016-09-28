@@ -5,63 +5,26 @@ use Psr\Http\Message\ResponseInterface;
 
 class Templates
 {
-    /** @var string */
-    private $directory;
-
-    /** @var string */
-    private $extension;
-
     /** @var Callables */
     private $defaultCallables;
+
+    /** @var Resolver */
+    private $defaultResolver;
 
     /**
      * Templates constructor.
      *
-     * @param string $directory Locations where templates are
      * @param Callables|null $defaultCallables Default callables object for new objects
-     * @param string $extension Templates extension
+     * @param Resolver|null $defaultResolver Default resolver object for new objects
      */
-    public function __construct($directory, Callables $defaultCallables = null, $extension = 'php')
+    public function __construct(Callables $defaultCallables = null, Resolver $defaultResolver = null)
     {
-        $this->setDirectory($directory);
         $this->setDefaultCallables($defaultCallables);
-        $this->setExtension($extension);
+        $this->setDefaultResolver($defaultResolver);
     }
 
     /**
-     * @return string
-     */
-    public function getDirectory()
-    {
-        return $this->directory;
-    }
-
-    /**
-     * @param string $directory
-     */
-    public function setDirectory($directory)
-    {
-        $this->directory = $directory;
-    }
-
-    /**
-     * @return string
-     */
-    public function getExtension()
-    {
-        return $this->extension;
-    }
-
-    /**
-     * @param string $extension
-     */
-    public function setExtension($extension)
-    {
-        $this->extension = $extension;
-    }
-
-    /**
-     * @return Callables
+     * @return Callables|null
      */
     public function getDefaultCallables()
     {
@@ -77,32 +40,34 @@ class Templates
     }
 
     /**
+     * @return Resolver|null
+     */
+    public function getDefaultResolver()
+    {
+        return $this->defaultResolver;
+    }
+
+    /**
+     * @param Resolver $defaultResolver
+     */
+    public function setDefaultResolver(Resolver $defaultResolver = null)
+    {
+        $this->defaultResolver = $defaultResolver;
+    }
+
+    /**
      * Create a Template passing a Callables object
      * If no Callables is provided it try to use the default Callables object
      *
      * @param Callables|null $callables
+     * @param Resolver|null $resolver
      * @return Template
      */
-    public function create(Callables $callables = null)
+    public function create(Callables $callables = null, Resolver $resolver = null)
     {
         $callables = $callables ? : $this->defaultCallables;
-        $template = new Template($callables);
-        return $template;
-    }
-
-    /**
-     * Resolve a filename by its friendly name, the real name will be
-     * directory + template + extension
-     *
-     * @param string $template
-     * @return string
-     */
-    public function filename($template)
-    {
-        if (0 === strpos($template, '../') || false !== strpos($template, '/../')) {
-            throw new \InvalidArgumentException('The filename try to escape the current path');
-        }
-        return $this->directory . '/' . $template . '.' . $this->extension;
+        $resolver = $resolver ? : $this->defaultResolver;
+        return new Template($callables, $resolver);
     }
 
     /**
@@ -114,8 +79,7 @@ class Templates
      */
     public function fetch($template, array $variables = [])
     {
-        $filename = $this->filename($template);
-        return $this->create()->fetch($filename, $variables);
+        return $this->create()->fetch($template, $variables);
     }
 
     /**

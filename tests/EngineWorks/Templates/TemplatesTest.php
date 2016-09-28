@@ -2,6 +2,7 @@
 namespace Tests\EngineWorks\Templates;
 
 use EngineWorks\Templates\Callables;
+use EngineWorks\Templates\Resolver;
 use EngineWorks\Templates\Templates;
 use PHPUnit\Framework\TestCase;
 use Slim\Http\Response;
@@ -13,14 +14,13 @@ class TemplatesTest extends TestCase
 
     protected function setUp()
     {
-        $this->templates = new Templates(__DIR__, null, 'phtml');
+        $this->templates = new Templates(null, null);
     }
 
     public function testConstructor()
     {
-        $this->assertSame(__DIR__, $this->templates->getDirectory());
-        $this->assertSame('phtml', $this->templates->getExtension());
         $this->assertNull($this->templates->getDefaultCallables());
+        $this->assertNull($this->templates->getDefaultResolver());
     }
 
     public function testCreateTemplateUsesDefaultCallablesWhenNoneProvided()
@@ -31,6 +31,14 @@ class TemplatesTest extends TestCase
         $this->assertSame($callables, $template->callables());
     }
 
+    public function testCreateTemplateUsesDefaultResolverWhenNoneProvided()
+    {
+        $resolver = new Resolver();
+        $this->templates->setDefaultResolver($resolver);
+        $template = $this->templates->create();
+        $this->assertSame($resolver, $template->resolver());
+    }
+
     public function testCreateTemplatesUsesSpecifiedCallables()
     {
         $callables = new Callables();
@@ -39,39 +47,17 @@ class TemplatesTest extends TestCase
         $this->assertSame($callables, $template->callables());
     }
 
-    public function testFilenameMethod()
+    public function testCreateTemplatesUsesSpecifiedResolver()
     {
-        $name = 'basename';
-        $expected = __DIR__ . '/' . $name . '.phtml';
-        $this->assertEquals($expected, $this->templates->filename($name));
-    }
-
-    public function providerFilenameThrowsException()
-    {
-        return [
-            ['../other'],
-            ['./../'],
-            ['/folder/../folder/'],
-        ];
-    }
-
-    /**
-     * @param $path
-     * @dataProvider providerFilenameThrowsException
-     */
-    public function testFilenameThrowsException($path)
-    {
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('');
-        $this->templates->filename($path);
+        $resolver = new Resolver();
+        $this->templates->setDefaultResolver(null);
+        $template = $this->templates->create(null, $resolver);
+        $this->assertSame($resolver, $template->resolver());
     }
 
     public function testFetchUsingStaticHelloWorldSample()
     {
-        // same as templateTest::samplesFile
-        $path = realpath(__DIR__ . '/../../samples');
-        $this->templates->setDirectory($path);
-        $this->templates->setExtension('php');
+        $this->templates->setDefaultResolver(new Resolver(Utils::samples(), 'php'));
 
         $expectedContent = '-- Hello world --';
         $content = $this->templates->fetch('hello-world');
@@ -84,12 +70,21 @@ class TemplatesTest extends TestCase
         $response = new Response();
 
         // same as templateTest::samplesFile
-        $path = realpath(__DIR__ . '/../../samples');
-        $this->templates->setDirectory($path);
-        $this->templates->setExtension('php');
+        $this->templates->setDefaultResolver(new Resolver(Utils::samples(), 'php'));
 
         $expectedContent = '-- Hello Response --';
         $response = $this->templates->render($response, 'hello-somebody', ['name' => 'Response']);
         $this->assertEquals($expectedContent, $response->getBody());
+    }
+
+    public function testFetchRecursive()
+    {
+        $this->templates->setDefaultResolver(new Resolver(Utils::samples(), 'php'));
+
+        $fetched = $this->templates->fetch('recursive', [
+            'value' => 1,
+        ]);
+        $expected = implode("\n", range(1, 10)) . "\n";
+        $this->assertEquals($expected, $fetched);
     }
 }
