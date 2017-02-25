@@ -5,9 +5,9 @@
 [![Software License][badge-license]][license]
 [![Build Status][badge-build]][build]
 [![Scrutinizer][badge-quality]][quality]
-[![SensioLabsInsight][badge-sensiolabs]][sensiolabs]
 [![Coverage Status][badge-coverage]][coverage]
 [![Total Downloads][badge-downloads]][downloads]
+[![SensioLabsInsight][badge-sensiolabs]][sensiolabs]
 
 This library is just for running PHP Templates.
 Similar projects: [Slim/Php-View](https://github.com/slimphp/PHP-View)
@@ -158,21 +158,8 @@ $callables->attach(new \EngineWorks\Templates\Slim\SlimPlugin(
 
 ## Contributing
 
-Contributions are welcome! Please read [CONTRIBUTING][] for details.
-Take a look in the TODO section.
-
-## TODO
-
-- [X] Release first stable version
-- [X] Publish on github & packagist
-- [X] Add library tools
-    - [X] Travis
-    - [X] Scrutinizer
-    - [X] Insight Sensiolabs
-    - [X] Coveralls
-- [X] ~~Include widgets~~
-- [X] Implement Resolver class to resolve the location of a template file
-- [ ] Document all the things!
+Contributions are welcome! Please read [CONTRIBUTING][] for details
+and don't forget to take a look in the [TODO][] and [CHANGELOG][] files.
 
 ## Copyright and License
 
@@ -181,21 +168,22 @@ and licensed for use under the MIT License (MIT). Please see [LICENSE][] for mor
 
 [contributing]: https://github.com/eclipxe13/engineworks-templates/blob/master/CONTRIBUTING.md
 [changelog]: https://github.com/eclipxe13/engineworks-templates/blob/master/TODO.md
+[todo]: https://github.com/eclipxe13/engineworks-templates/blob/master/TODO.md
 
 [source]: https://github.com/eclipxe13/engineworks-templates
 [release]: https://github.com/eclipxe13/engineworks-templates/releases
 [license]: https://github.com/eclipxe13/engineworks-templates/blob/master/LICENSE
 [build]: https://travis-ci.org/eclipxe13/engineworks-templates
-[quality]: https://scrutinizer-ci.com/g/eclipxe13/engineworks-templates/
+[quality]: https://scrutinizer-ci.com/g/eclipxe13/engineworks-templates?branch=master
 [sensiolabs]: https://insight.sensiolabs.com/projects/78579b64-f74b-46a6-a614-0b9a66e59c0a
-[coverage]: https://coveralls.io/github/eclipxe13/engineworks-templates?branch=master
+[coverage]: https://scrutinizer-ci.com/g/eclipxe13/engineworks-templates/?branch=master
 [downloads]: https://packagist.org/packages/eclipxe/engineworks-templates
 
 [badge-source]: http://img.shields.io/badge/source-eclipxe13/engineworks--templates-blue.svg?style=flat-square
 [badge-release]: https://img.shields.io/github/release/eclipxe13/engineworks-templates.svg?style=flat-square
 [badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[badge-build]: https://img.shields.io/travis/eclipxe13/engineworks-templates.svg?style=flat-square
+[badge-build]: https://img.shields.io/travis/eclipxe13/engineworks-templates/master.svg?style=flat-square
 [badge-quality]: https://img.shields.io/scrutinizer/g/eclipxe13/engineworks-templates/master.svg?style=flat-square
-[badge-sensiolabs]: https://img.shields.io/sensiolabs/i/78579b64-f74b-46a6-a614-0b9a66e59c0a.svg?style=flat-square
-[badge-coverage]: https://coveralls.io/repos/github/eclipxe13/engineworks-templates/badge.svg?branch=master
+[badge-sensiolabs]: https://insight.sensiolabs.com/projects/78579b64-f74b-46a6-a614-0b9a66e59c0a/mini.png
+[badge-coverage]: https://img.shields.io/scrutinizer/coverage/g/eclipxe13/engineworks-templates/master.svg?style=flat-square
 [badge-downloads]: https://img.shields.io/packagist/dt/eclipxe/engineworks-templates.svg?style=flat-square
