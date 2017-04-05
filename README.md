@@ -167,7 +167,7 @@ The EngineWorks\Templates library is copyright © [Carlos C Soto](https://eclipx
 and licensed for use under the MIT License (MIT). Please see [LICENSE][] for more information.
 
 [contributing]: https://github.com/eclipxe13/engineworks-templates/blob/master/CONTRIBUTING.md
-[changelog]: https://github.com/eclipxe13/engineworks-templates/blob/master/TODO.md
+[changelog]: https://github.com/eclipxe13/engineworks-templates/blob/master/CHANGELOG.md
 [todo]: https://github.com/eclipxe13/engineworks-templates/blob/master/TODO.md
 
 [source]: https://github.com/eclipxe13/engineworks-templates
