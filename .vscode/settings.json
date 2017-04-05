@@ -1,9 +1,0 @@
-// Coloque su configuración en este archivo para sobrescribir la configuración predeterminada y de usuario.
-{
-    
-    // phpmd
-    "phpmd.validate.rulesets": "cleancode,codesize,controversial,design,naming,unusedcode",
-
-    // Path to phpunit executable.
-    "phpunit.execPath": "vendor/bin/phpunit --bootstrap bootstrap.php"
-}
