@@ -1,3 +1,18 @@
+# version 2.0.2
+- Remove dependency of slim/php-view
+- Install scrutinizer/ocular only on travis
+- Avoid package versions @stable
+- Package phpunit/phpunit is version 5.X to check over php 5.6
+
+# version 2.0.1
+- Add support for php-cs-fixer
+- Remove coveralls: README.md, composer.json, .travis.yml
+- Rename .php_cs to .php_cs.dist and phpunit.xml to phpunit.xml.dist
+- Travis-CI: Add php 7.1, add php-cs-fixer, remove coveralls
+- Update .gitattributes
+- Update license year
+- Update sensiolabs badge
+
 # version 2.0.0
 - Create `Resolver` class to retrieve the location of the template based on a template name
     - This allow to call `fetch` inside a `Template object` to include other template
