@@ -18,7 +18,7 @@ sudo: false
 before_script:
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-dist
-  - if [[ $TRAVIS_PHP_VERSION == '7.0' ]]; then travis_retry composer require --dev --no-interaction --prefer-dist scrutinizer/ocular; fi
+  - test $TRAVIS_PHP_VERSION == '7.0' && travis_retry composer require --dev --no-interaction --prefer-dist scrutinizer/ocular
 
 script:
   - mkdir -p build/tests/
@@ -28,7 +28,7 @@ script:
   - vendor/bin/phpunit --coverage-text --coverage-clover=build/tests/coverage.xml
 
 after_script:
-  - if [[ $TRAVIS_PHP_VERSION == '7.0' ]]; then php vendor/bin/ocular code-coverage:upload --format=php-clover build/tests/coverage.xml; fi
+  - test $TRAVIS_PHP_VERSION == '7.0' && php vendor/bin/ocular code-coverage:upload --format=php-clover build/tests/coverage.xml
 
 notifications:
   email: false
