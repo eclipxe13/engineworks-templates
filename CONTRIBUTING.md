@@ -61,7 +61,7 @@ If you are having issues with coding standars use `php-cs-fixer` and `phpcbf`
 
 ```bash
 vendor/bin/php-cs-fixer fix -v
-vendor/bin/phpcbf sources/ tests/
+vendor/bin/phpcbf src/ tests/
 ```
 
 ## Running Tests
@@ -70,7 +70,7 @@ The following tests must pass before we will accept a pull request. If any of th
 it will result in a complete build failure. Before you can run these, be sure to `composer install`.
 
 ```
-vendor/bin/parallel-lint sources/ tests/
-vendor/bin/phpcs -sp sources/ tests/
+vendor/bin/parallel-lint src/ tests/
+vendor/bin/phpcs -sp src/ tests/
 vendor/bin/phpunit --coverage-text
 ```

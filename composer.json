@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "EngineWorks\\Templates\\": "sources/EngineWorks/Templates/"
+            "EngineWorks\\Templates\\": "src/EngineWorks/Templates/"
         }
     },
     "autoload-dev": {
