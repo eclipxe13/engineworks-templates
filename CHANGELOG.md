@@ -1,3 +1,9 @@
+# version 2.0.2
+- Remove dependency of slim/php-view
+- Install scrutinizer/ocular only on travis
+- Avoid package versions @stable
+- Package phpunit/phpunit is version 5.X to check over php 5.6
+
 # version 2.0.1
 - Add support for php-cs-fixer
 - Remove coveralls: README.md, composer.json, .travis.yml
