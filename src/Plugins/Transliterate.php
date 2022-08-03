@@ -100,15 +100,15 @@ class Transliterate implements Plugin
      */
     public function valueToString($value)
     {
-        if (is_scalar($value) || (is_object($value) && is_callable([$value, '__toString']))) {
+        if (is_null($value) || is_scalar($value) || (is_object($value) && is_callable([$value, '__toString']))) {
             return (string) $value;
         }
-        if (is_array($value) || $value instanceof \Traversable) {
-            $buffer = '';
+        if (is_iterable($value)) {
+            $buffer = [];
             foreach ($value as $innerValue) {
-                $buffer .= $this->valueToString($innerValue);
+                $buffer[] = $this->valueToString($innerValue);
             }
-            return $buffer;
+            return implode('', $buffer);
         }
         return '';
     }
