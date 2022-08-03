@@ -1,5 +1,5 @@
 <?php
-namespace Tests\EngineWorks\Templates\Mocks;
+namespace EngineWorks\Templates\Tests\Mocks;
 
 class ObjectToString
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Tests\EngineWorks\Templates\Plugins;
+namespace EngineWorks\Templates\Tests\Plugins;
 
 use EngineWorks\Templates\Plugins\FormatNumber;
 use PHPUnit\Framework\TestCase;

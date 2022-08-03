@@ -1,5 +1,5 @@
 <?php
-namespace Tests\EngineWorks\Templates;
+namespace EngineWorks\Templates\Tests;
 
 use EngineWorks\Templates\Callables;
 use EngineWorks\Templates\Plugins\HtmlEscape;
@@ -11,7 +11,7 @@ class CallablesTest extends TestCase
     /** @var Callables */
     private $callables;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->callables = new Callables();
     }

@@ -1,5 +1,6 @@
 <?php
-namespace Tests\EngineWorks\Templates;
+
+namespace EngineWorks\Templates\Tests;
 
 use EngineWorks\Templates\Callables;
 use EngineWorks\Templates\Resolver;
@@ -31,7 +32,7 @@ class TemplateTest extends TestCase
     public function testIsValidTemplateFilenameNotReadable()
     {
         $template = new Template();
-        $tempfile = tempnam(null, null);
+        $tempfile = tempnam('', '');
         chmod($tempfile, 0);
 
         $this->assertFalse($template->isValidTemplateFilename($tempfile), 'Testing not readable return true');
@@ -80,7 +81,7 @@ class TemplateTest extends TestCase
         $template = new Template();
 
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageRegExp('/Template .* does not exists/');
+        $this->expectExceptionMessageMatches('/Template .* does not exists/');
 
         $template->fetch($filename);
     }

@@ -1,5 +1,5 @@
 <?php
-namespace Tests\EngineWorks\Templates;
+namespace EngineWorks\Templates\Tests;
 
 use EngineWorks\Templates\Resolver;
 use PHPUnit\Framework\TestCase;
@@ -57,7 +57,7 @@ class ResolverTest extends TestCase
     {
         $resolver = new Resolver('templates');
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('');
+        $this->expectExceptionMessage('The filename try to escape the current path');
         $resolver->resolve($path);
     }
 }

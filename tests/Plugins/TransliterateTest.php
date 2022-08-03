@@ -1,10 +1,10 @@
 <?php
-namespace Tests\EngineWorks\Templates\Plugins;
+namespace EngineWorks\Templates\Tests\Plugins;
 
 use EngineWorks\Templates\Plugin;
 use EngineWorks\Templates\Plugins\Transliterate;
 use PHPUnit\Framework\TestCase;
-use Tests\EngineWorks\Templates\Mocks\ObjectToString;
+use EngineWorks\Templates\Tests\Mocks\ObjectToString;
 
 class TransliterateTest extends TestCase
 {

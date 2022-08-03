@@ -1,18 +1,18 @@
 <?php
-namespace Tests\EngineWorks\Templates;
+namespace EngineWorks\Templates\Tests;
 
 use EngineWorks\Templates\Callables;
 use EngineWorks\Templates\Resolver;
 use EngineWorks\Templates\Templates;
 use PHPUnit\Framework\TestCase;
-use Slim\Http\Response;
+use Slim\Psr7\Response;
 
 class TemplatesTest extends TestCase
 {
     /** @var Templates */
     private $templates;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->templates = new Templates(null, null);
     }

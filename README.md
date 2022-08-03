@@ -7,7 +7,6 @@
 [![Scrutinizer][badge-quality]][quality]
 [![Coverage Status][badge-coverage]][coverage]
 [![Total Downloads][badge-downloads]][downloads]
-[![SensioLabsInsight][badge-sensiolabs]][sensiolabs]
 
 This library is just for running PHP Templates.
 Similar projects: [Slim/Php-View](https://github.com/slimphp/PHP-View)
@@ -53,7 +52,7 @@ it helps to locate this objects with a common `Callables` object,
 in a common directory with a common file extension.
 
 The most common used method would be `fetch`.
-It simply create a `Template` using the file specified by directory + name + extension, with the default callables
+It simply creates a `Template` using the file specified by directory + name + extension, with the default callables
 Then will call `fetch` on that template.
 
 ## EngineWorks\Templates\Template
@@ -65,12 +64,12 @@ or by `Templates::create` (non-static call).
 
 `fetch` method receives two arguments, a template name and a variables array.
  It will resolve the file name using the Resolver object.
- It will convert the array to variables (using `extract`) in order to make accesible this variables to the file.
+ It will convert the array to variables (using `extract`) in order to make accesible these variables to the file.
  
 # Inside the template
 
 The template file is a PHP file, it will have all the variables that were set to fetch method.
-Also you can use `$this`, wich is refered to the `Template` object.
+Also, you can use `$this`, wich is refered to the `Template` object.
 
 The `$this` object offer some functions registered in the `Callables` object, in the example above the `$callables`
 was attatched with the following functions:
@@ -79,7 +78,7 @@ was attatched with the following functions:
 - `js($string)`: escape as javascript
 - `ejs($string)`: escape as html and then as javascript
 - `uri($string)`: escape as uri (see `rawurlencode`)
-- `url($url, $vars)`: create a url with the defined `$vars`
+- `url($url, $vars)`: create an url with the defined `$vars`
 - `qry($vars)`: create a query string with the defined `$vars`
 - `fn($number, $decimals = $this->getDefaultDecimals())`: return a formatted number
 - `tr($message, $arguments, $encoder = $this->getDefaultEncoder())`: return a transliterated message, very useful for
@@ -134,36 +133,35 @@ This method is act as a decorator to fetch the template and write the contents i
 the `ResponseInterface` object.
 
 You only need to use this method in case you are using a PSR-7 compatible library.
-Otherwise I recommend you to use `fetch` method. As this is optional, the psr/http-message package
+Otherwise, I recommend you to use `fetch` method. As this is optional, the psr/http-message package
 is not a composer dependence but a suggestion.
 
-## Integrate with Slim 3
+## Integrate with Slim 4
 
-To use this library in Slim 3 we provide a plugin named `SlimPlugin` that offers two methods:
-- `pathFor`: shortcut for `\Slim\Interfaces\RouterInterface::pathFor` method
-- `baseUrl`: return baseUrl property (setup from `\Slim\Http\Uri::getBaseUrl`)
+To use this library in Slim 4 we provide a plugin named `Slim4Plugin` that offers two methods:
+- `pathFor`: shortcut for `\Slim\Interfaces\RouteParserInterface::urlFor` method
+- `baseUrl`: return `baseUrl` property (setup from `\Slim\App::getBasePath`)
 
 This is a common code to attach the plugin into the `Callables` collection:
 
 ```php
 <?php
 /* @var $callables \EngineWorks\Templates\Callables */
-/* @var $container['router'] \Slim\Interfaces\RouterInterface */
-/* @var $request \Slim\Http\Request */
-$callables->attach(new \EngineWorks\Templates\Slim\SlimPlugin(
-    $container['router'],
-    $request->getUri()->getBasePath()
+/* @var $app Slim\App */
+$callables->attach(new \EngineWorks\Templates\Slim\Slim4Plugin(
+    $app->getRouteCollector()->getRouteParser(),
+    $app->getBasePath()
 ));
 ```
 
 ## Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING][] for details
-and don't forget to take a look in the [TODO][] and [CHANGELOG][] files.
+and don't forget to take a look on the [TODO][] and [CHANGELOG][] files.
 
 ## Copyright and License
 
-The EngineWorks\Templates library is copyright © [Carlos C Soto](https://eclipxe.com.mx/)
+The `EngineWorks\Templates` library is copyright © [Carlos C Soto](https://eclipxe.com.mx/)
 and licensed for use under the MIT License (MIT). Please see [LICENSE][] for more information.
 
 [contributing]: https://github.com/eclipxe13/engineworks-templates/blob/master/CONTRIBUTING.md
@@ -173,17 +171,15 @@ and licensed for use under the MIT License (MIT). Please see [LICENSE][] for mor
 [source]: https://github.com/eclipxe13/engineworks-templates
 [release]: https://github.com/eclipxe13/engineworks-templates/releases
 [license]: https://github.com/eclipxe13/engineworks-templates/blob/master/LICENSE
-[build]: https://travis-ci.org/eclipxe13/engineworks-templates
+[build]: https://github.com/eclipxe13/engineworks-templates/actions/workflows/build.yml?query=branch:main
 [quality]: https://scrutinizer-ci.com/g/eclipxe13/engineworks-templates?branch=master
-[sensiolabs]: https://insight.sensiolabs.com/projects/78579b64-f74b-46a6-a614-0b9a66e59c0a
 [coverage]: https://scrutinizer-ci.com/g/eclipxe13/engineworks-templates/?branch=master
 [downloads]: https://packagist.org/packages/eclipxe/engineworks-templates
 
 [badge-source]: http://img.shields.io/badge/source-eclipxe13/engineworks--templates-blue.svg?style=flat-square
 [badge-release]: https://img.shields.io/github/release/eclipxe13/engineworks-templates.svg?style=flat-square
 [badge-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[badge-build]: https://img.shields.io/travis/eclipxe13/engineworks-templates/master.svg?style=flat-square
+[badge-build]: https://img.shields.io/github/workflow/status/eclipxe13/engineworks-templates/build/main?style=flat-square
 [badge-quality]: https://img.shields.io/scrutinizer/g/eclipxe13/engineworks-templates/master.svg?style=flat-square
-[badge-sensiolabs]: https://insight.sensiolabs.com/projects/78579b64-f74b-46a6-a614-0b9a66e59c0a/mini.png
 [badge-coverage]: https://img.shields.io/scrutinizer/coverage/g/eclipxe13/engineworks-templates/master.svg?style=flat-square
 [badge-downloads]: https://img.shields.io/packagist/dt/eclipxe/engineworks-templates.svg?style=flat-square

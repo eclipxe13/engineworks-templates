@@ -54,7 +54,7 @@ class HtmlEscape implements Plugin
 
     public function query(array $vars)
     {
-        return http_build_query($vars, null, '&', PHP_QUERY_RFC3986);
+        return http_build_query($vars, '', '&', PHP_QUERY_RFC3986);
     }
 
     public function url($url, array $vars = [])
@@ -65,8 +65,8 @@ class HtmlEscape implements Plugin
             throw new \InvalidArgumentException('The url is not a string');
         }
         // get query and fragment
-        $qrystr = parse_url($url, PHP_URL_QUERY);
-        $fragstr = parse_url($url, PHP_URL_FRAGMENT);
+        $qrystr = (string) parse_url($url, PHP_URL_QUERY);
+        $fragstr = (string) parse_url($url, PHP_URL_FRAGMENT);
         $qrylen = strlen($qrystr);
         $fraglen = strlen($fragstr);
         $parts = ($qrylen > 0) + ($fraglen > 0);
