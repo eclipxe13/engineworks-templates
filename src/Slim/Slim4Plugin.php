@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EngineWorks\Templates\Slim;
 
 use EngineWorks\Templates\Plugin;
@@ -9,7 +11,7 @@ class Slim4Plugin implements Plugin
 {
     /**
      * @inheritdoc
-     * @return array<string, string>
+     * @return array{pathFor: string, baseUrl: string}
      */
     public function getCallablesTable(): array
     {
@@ -27,9 +29,6 @@ class Slim4Plugin implements Plugin
 
     public function __construct(RouteParserInterface $router, string $baseUrl)
     {
-        if (! is_string($baseUrl)) {
-            throw new \InvalidArgumentException('baseUrl must be a string');
-        }
         $this->router = $router;
         $this->baseUrl = $baseUrl;
     }

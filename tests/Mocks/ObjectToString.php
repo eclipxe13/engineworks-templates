@@ -1,17 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates\Tests\Mocks;
 
-class ObjectToString
+final class ObjectToString
 {
-    /** @var  string */
+    /** @var string */
     private $content;
 
-    public function __construct($content)
+    public function __construct(string $content)
     {
         $this->content = $content;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->content;
     }

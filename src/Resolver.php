@@ -1,5 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates;
+
+use InvalidArgumentException;
 
 class Resolver
 {
@@ -15,40 +20,28 @@ class Resolver
      * @param string $directory Locations where templates are
      * @param string $extension Templates extension
      */
-    public function __construct($directory = '', $extension = 'php')
+    public function __construct(string $directory = '', string $extension = 'php')
     {
         $this->setDirectory($directory);
         $this->setExtension($extension);
     }
 
-    /**
-     * @return string
-     */
-    public function getDirectory()
+    public function getDirectory(): string
     {
         return $this->directory;
     }
 
-    /**
-     * @param string $directory
-     */
-    public function setDirectory($directory)
+    public function setDirectory(string $directory): void
     {
         $this->directory = $directory;
     }
 
-    /**
-     * @return string
-     */
-    public function getExtension()
+    public function getExtension(): string
     {
         return $this->extension;
     }
 
-    /**
-     * @param string $extension
-     */
-    public function setExtension($extension)
+    public function setExtension(string $extension): void
     {
         $this->extension = $extension;
     }
@@ -56,14 +49,11 @@ class Resolver
     /**
      * Resolve a filename by its friendly name, the real name will be
      * directory + template + extension
-     *
-     * @param string $template
-     * @return string
      */
-    public function resolve($template)
+    public function resolve(string $template): string
     {
         if (0 === strpos($template, '../') || false !== strpos($template, '/../')) {
-            throw new \InvalidArgumentException('The filename try to escape the current path');
+            throw new InvalidArgumentException('The filename try to escape the current path');
         }
         return $this->directory . '/' . $template . '.' . $this->extension;
     }

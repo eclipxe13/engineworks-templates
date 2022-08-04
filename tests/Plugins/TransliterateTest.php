@@ -1,14 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates\Tests\Plugins;
 
+use DateTime;
 use EngineWorks\Templates\Plugin;
 use EngineWorks\Templates\Plugins\Transliterate;
-use PHPUnit\Framework\TestCase;
 use EngineWorks\Templates\Tests\Mocks\ObjectToString;
+use EngineWorks\Templates\Tests\TestCase;
 
-class TransliterateTest extends TestCase
+final class TransliterateTest extends TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $trans = new Transliterate();
 
@@ -16,7 +20,7 @@ class TransliterateTest extends TestCase
         $this->assertTrue(is_callable($trans->getDefaultEncoder()));
     }
 
-    public function testCallablesTable()
+    public function testCallablesTable(): void
     {
         $expectedTableNames = ['tr'];
         $html = new Transliterate();
@@ -26,7 +30,7 @@ class TransliterateTest extends TestCase
         }
     }
 
-    public function testNullEncoderStaticMethod()
+    public function testNullEncoderStaticMethod(): void
     {
         $expected = '<p>"Lorem & Ipsum\'\0x02</p>';
         $message = '<p>"Lorem & Ipsum\'\0x02</p>';
@@ -35,7 +39,10 @@ class TransliterateTest extends TestCase
         $this->assertSame($expected, $trans::nullEncoder($message));
     }
 
-    public function providerTransliterateUpperCase()
+    /**
+     * @return array<string, array{string, array<string, mixed>, string}>
+     */
+    public function providerTransliterateUpperCase(): array
     {
         return [
             'normal' => ['hello {name}! {name}, are you ok?', ['name' => 'world'], 'hello WORLD! WORLD, are you ok?'],
@@ -43,7 +50,7 @@ class TransliterateTest extends TestCase
             'array' => ['hello {name}!', ['name' => ['foo', new ObjectToString('bar'), ['BAZ']]], 'hello FOOBARBAZ!'],
             'integer' => ['hello {name}!', ['name' => 12345], 'hello 12345!'],
             'null' => ['hello {name}!', ['name' => null], 'hello !'],
-            'invalid' => ['hello {name}!', ['name' => new \DateTime()], 'hello !'],
+            'invalid' => ['hello {name}!', ['name' => new DateTime()], 'hello !'],
             'two times' => ['{name} - {name}', ['name' => 'FOO'], 'FOO - FOO'],
             'some non-existent' => ['{name} - {age}', ['name' => 'FOO'], 'FOO - {age}'],
             'all non-existent' => ['{last} - {age}', ['name' => 'FOO'], '{last} - {age}'],
@@ -54,19 +61,20 @@ class TransliterateTest extends TestCase
     }
 
     /**
-     * @param $message
-     * @param $arguments
-     * @param $expected
+     * @param array<string, mixed> $arguments
      * @dataProvider providerTransliterateUpperCase
      */
-    public function testTransliterateUpperCase($message, $arguments, $expected)
+    public function testTransliterateUpperCase(string $message, array $arguments, string $expected): void
     {
         $trans = new Transliterate('strtoupper');
         $retrieved = $trans->transliterate($message, $arguments);
         $this->assertEquals($expected, $retrieved);
     }
 
-    public function providerGetCurlyBracesKeys()
+    /**
+     * @return array<string, mixed[]>
+     */
+    public function providerGetCurlyBracesKeys(): array
     {
         return [
             'unique' => ['{simple}', ['{simple}']],
@@ -104,8 +112,9 @@ class TransliterateTest extends TestCase
      * @param $message
      * @param $expected
      * @dataProvider providerGetCurlyBracesKeys
+     * @param string[]|mixed[] $expected
      */
-    public function testGetCurlyBracesKeys($message, $expected)
+    public function testGetCurlyBracesKeys(string $message, array $expected): void
     {
         $trans = new Transliterate();
         $this->assertEquals($expected, array_values($trans->getCurlyBracesKeys($message)));

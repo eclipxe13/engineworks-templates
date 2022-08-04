@@ -1,5 +1,11 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates;
+
+use InvalidArgumentException;
+use RuntimeException;
 
 class Template
 {
@@ -17,26 +23,22 @@ class Template
      */
     public function __construct(Callables $callables = null, Resolver $resolver = null)
     {
-        $this->callables = ($callables) ? : new Callables();
-        $this->resolver = ($resolver) ? : new Resolver();
+        $this->callables = $callables ?? new Callables();
+        $this->resolver = $resolver ?? new Resolver();
     }
 
     /**
      * Retrieve the Callables object
-     *
-     * @return Callables
      */
-    public function callables()
+    public function callables(): Callables
     {
         return $this->callables;
     }
 
     /**
      * Retrieve the Resolver object
-     *
-     * @return Resolver
      */
-    public function resolver()
+    public function resolver(): Resolver
     {
         return $this->resolver;
     }
@@ -45,10 +47,10 @@ class Template
      * Magic method to export calls to $this into calls to Callables
      *
      * @param string $name
-     * @param mixed $arguments
+     * @param array<mixed> $arguments
      * @return string
      */
-    public function __call($name, $arguments)
+    public function __call(string $name, array $arguments): string
     {
         return $this->callables->call($name, $arguments);
     }
@@ -56,23 +58,19 @@ class Template
     /**
      * Retrieve if a resolved file is a valid template
      * If return FALSE then the $errorMessage variable is populated
-     *
-     * @param string $templateFilename
-     * @param string $errorMessage
-     * @return bool
      */
-    public function isValidTemplateFilename($templateFilename, &$errorMessage = '')
+    public function isValidTemplateFilename(string $templateFilename, string &$errorMessage = ''): bool
     {
         if (! file_exists($templateFilename)) {
-            $errorMessage = "Template {$templateFilename} does not exists";
+            $errorMessage = "Template $templateFilename does not exists";
             return false;
         }
         if (! is_readable($templateFilename)) {
-            $errorMessage = "Template {$templateFilename} is not readable";
+            $errorMessage = "Template $templateFilename is not readable";
             return false;
         }
         if (is_dir($templateFilename)) {
-            $errorMessage = "Template {$templateFilename} is a directory";
+            $errorMessage = "Template $templateFilename is a directory";
             return false;
         }
         return true;
@@ -82,24 +80,22 @@ class Template
      * Fetch and return the content of a templates passing the specified variables.
      * Inside the template the variable $this refer to exactly this template object
      *
-     * @param string $templateName
-     * @param array $templateVariables
-     * @return string
+     * @param array<string, mixed> $templateVariables
      */
-    public function fetch($templateName, array $templateVariables = [])
+    public function fetch(string $templateName, array $templateVariables = []): string
     {
         $templateName = $this->resolver->resolve($templateName);
+        $errorMessage = '';
         if (! $this->isValidTemplateFilename($templateName, $errorMessage)) {
-            throw new \InvalidArgumentException($errorMessage);
+            throw new InvalidArgumentException($errorMessage);
         }
         if (! ob_start()) {
-            throw new \RuntimeException('Cannot create a new buffer');
+            throw new RuntimeException('Cannot create a new buffer');
         }
         // as we are using EXTR_OVERWRITE lets remove $templateName if set
         unset($templateVariables['templateName']);
         extract($templateVariables, EXTR_OVERWRITE);
-        /** @noinspection PhpIncludeInspection */
         require $templateName;
-        return ob_get_clean();
+        return (string) ob_get_clean();
     }
 }

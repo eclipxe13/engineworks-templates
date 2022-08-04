@@ -1,18 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates\Tests\Plugins;
 
 use EngineWorks\Templates\Plugins\FormatNumber;
-use PHPUnit\Framework\TestCase;
+use EngineWorks\Templates\Tests\TestCase;
+use InvalidArgumentException;
 
-class FormatNumberTest extends TestCase
+final class FormatNumberTest extends TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $formatNumber = new FormatNumber();
         $this->assertSame(2, $formatNumber->getDefaultDecimals());
     }
 
-    public function testCallablesTable()
+    public function testCallablesTable(): void
     {
         $expectedTableNames = ['fn'];
         $formatNumber = new FormatNumber();
@@ -22,45 +26,30 @@ class FormatNumberTest extends TestCase
         }
     }
 
-    public function testConstructorWithDecimals()
+    public function testConstructorWithDecimals(): void
     {
         $formatNumber = new FormatNumber(4);
         $this->assertSame(4, $formatNumber->getDefaultDecimals());
     }
 
-    public function testSetDefaultDecimals()
+    public function testSetDefaultDecimals(): void
     {
         $formatNumber = new FormatNumber();
         $formatNumber->setDefaultDecimals(4);
         $this->assertSame(4, $formatNumber->getDefaultDecimals());
     }
 
-    public function providerSetDefaultDecimalsThrowsInvalidArgumentException()
-    {
-        return [
-            'null' => [null],
-            'empty' => [''],
-            'not integer' => ['0'],
-            'negative integer' => ['-5'],
-            'float' => [1.0],
-        ];
-    }
-
-    /**
-     * @param mixed $value
-     * @dataProvider providerSetDefaultDecimalsThrowsInvalidArgumentException
-     */
-    public function testSetDefaultDecimalsThrowsInvalidArgumentException($value)
+    public function testSetDefaultDecimalsThrowsInvalidArgumentException(): void
     {
         $formatNumber = new FormatNumber();
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The default decimals argument is not an integer greater than zero');
 
-        $formatNumber->setDefaultDecimals($value);
+        $formatNumber->setDefaultDecimals(-5);
     }
 
-    public function testFormat()
+    public function testFormat(): void
     {
         $formatNumber = new FormatNumber(2);
         $number = 12345.678;

@@ -1,14 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates;
 
 use Psr\Http\Message\ResponseInterface;
 
 class Templates
 {
-    /** @var Callables */
+    /** @var Callables|null */
     private $defaultCallables;
 
-    /** @var Resolver */
+    /** @var Resolver|null */
     private $defaultResolver;
 
     /**
@@ -23,34 +26,22 @@ class Templates
         $this->setDefaultResolver($defaultResolver);
     }
 
-    /**
-     * @return Callables|null
-     */
-    public function getDefaultCallables()
+    public function getDefaultCallables(): ?Callables
     {
         return $this->defaultCallables;
     }
 
-    /**
-     * @param Callables $defaultCallables
-     */
-    public function setDefaultCallables(Callables $defaultCallables = null)
+    public function setDefaultCallables(Callables $defaultCallables = null): void
     {
         $this->defaultCallables = $defaultCallables;
     }
 
-    /**
-     * @return Resolver|null
-     */
-    public function getDefaultResolver()
+    public function getDefaultResolver(): ?Resolver
     {
         return $this->defaultResolver;
     }
 
-    /**
-     * @param Resolver $defaultResolver
-     */
-    public function setDefaultResolver(Resolver $defaultResolver = null)
+    public function setDefaultResolver(Resolver $defaultResolver = null): void
     {
         $this->defaultResolver = $defaultResolver;
     }
@@ -61,23 +52,20 @@ class Templates
      *
      * @param Callables|null $callables
      * @param Resolver|null $resolver
-     * @return Template
      */
-    public function create(Callables $callables = null, Resolver $resolver = null)
+    public function create(Callables $callables = null, Resolver $resolver = null): Template
     {
-        $callables = $callables ? : $this->defaultCallables;
-        $resolver = $resolver ? : $this->defaultResolver;
+        $callables = $callables ?? $this->defaultCallables;
+        $resolver = $resolver ?? $this->defaultResolver;
         return new Template($callables, $resolver);
     }
 
     /**
      * Create a template from its frienly name using the specified variables.
      *
-     * @param string $template
-     * @param array $variables
-     * @return string
+     * @param array<string, mixed> $variables
      */
-    public function fetch($template, array $variables = [])
+    public function fetch(string $template, array $variables = []): string
     {
         return $this->create()->fetch($template, $variables);
     }
@@ -86,12 +74,9 @@ class Templates
      * Return the response object with the return value of the fetched template
      * Use this function as a compatibility method with PSR-7
      *
-     * @param ResponseInterface $response
-     * @param string $template
-     * @param array $variables
-     * @return ResponseInterface
+     * @param array<string, mixed> $variables
      */
-    public function render(ResponseInterface $response, $template, array $variables = [])
+    public function render(ResponseInterface $response, string $template, array $variables = []): ResponseInterface
     {
         $response->getBody()->write($this->fetch($template, $variables));
         return $response;

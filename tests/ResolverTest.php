@@ -1,46 +1,51 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates\Tests;
 
 use EngineWorks\Templates\Resolver;
-use PHPUnit\Framework\TestCase;
 
-class ResolverTest extends TestCase
+final class ResolverTest extends TestCase
 {
-    public function testConstructorWithDefaultValues()
+    public function testConstructorWithDefaultValues(): void
     {
         $resolver = new Resolver();
         $this->assertSame('', $resolver->getDirectory());
         $this->assertSame('php', $resolver->getExtension());
     }
 
-    public function testConstructorWithArguments()
+    public function testConstructorWithArguments(): void
     {
         $resolver = new Resolver('foo', 'bar');
         $this->assertSame('foo', $resolver->getDirectory());
         $this->assertSame('bar', $resolver->getExtension());
     }
 
-    public function testSetDirectory()
+    public function testSetDirectory(): void
     {
         $resolver = new Resolver();
         $resolver->setDirectory('foo/bar/baz');
         $this->assertSame('foo/bar/baz', $resolver->getDirectory());
     }
 
-    public function testSetExtension()
+    public function testSetExtension(): void
     {
         $resolver = new Resolver();
         $resolver->setExtension('bah');
         $this->assertSame('bah', $resolver->getExtension());
     }
 
-    public function testResolve()
+    public function testResolve(): void
     {
         $resolver = new Resolver('templates');
         $this->assertEquals('templates/folder/name.php', $resolver->resolve('folder/name'));
     }
 
-    public function providerFilenameThrowsException()
+    /**
+     * @return array<int, array<string>>
+     */
+    public function providerFilenameThrowsException(): array
     {
         return [
             ['../other'],
@@ -53,7 +58,7 @@ class ResolverTest extends TestCase
      * @param $path
      * @dataProvider providerFilenameThrowsException
      */
-    public function testFilenameThrowsException($path)
+    public function testFilenameThrowsException(string $path): void
     {
         $resolver = new Resolver('templates');
         $this->expectException(\InvalidArgumentException::class);

@@ -1,13 +1,16 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates\Tests\Slim;
 
 use EngineWorks\Templates\Slim\Slim4Plugin;
-use PHPUnit\Framework\TestCase;
+use EngineWorks\Templates\Tests\TestCase;
 use Slim\Interfaces\RouteParserInterface;
 
-class Slim4PluginTest extends TestCase
+final class Slim4PluginTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $pathFor = 'mocked return';
         $baseUrl = 'foo/bar';
@@ -15,10 +18,10 @@ class Slim4PluginTest extends TestCase
         $router->method('urlFor')->willReturn($pathFor);
         $slim4Plugin = new Slim4Plugin($router, $baseUrl);
         $this->assertSame($baseUrl, $slim4Plugin->baseUrl());
-        print_r($pathFor, $slim4Plugin->pathFor('/', ['foo' => 'bar'], ['bar' => 'gaz']));
+        $this->assertSame($pathFor, $slim4Plugin->pathFor('/', ['foo' => 'bar'], ['bar' => 'gaz']));
     }
 
-    public function testCallablesTable()
+    public function testCallablesTable(): void
     {
         $expectedTableNames = ['pathFor', 'baseUrl'];
         $slim4Plugin = new Slim4Plugin($this->createMock(RouteParserInterface::class), '');

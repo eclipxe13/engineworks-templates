@@ -5,6 +5,7 @@
 - Change minimal version to PHP 7.3.
 - Update license year.
 - Remove `SlimPlugin`, replace it with `Slim4Plugin`.
+- Code is now fully typed and uses strict types.
 
 ### Development changes
 

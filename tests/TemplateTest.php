@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace EngineWorks\Templates\Tests;
 
 use EngineWorks\Templates\Callables;
 use EngineWorks\Templates\Resolver;
 use EngineWorks\Templates\Template;
-use PHPUnit\Framework\TestCase;
 
-class TemplateTest extends TestCase
+final class TemplateTest extends TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $template = new Template();
 
@@ -17,22 +18,25 @@ class TemplateTest extends TestCase
         $this->assertInstanceOf(Resolver::class, $template->resolver());
     }
 
-    public function testIsValidTemplateFilenameDirectory()
+    public function testIsValidTemplateFilenameDirectory(): void
     {
         $template = new Template();
         $this->assertFalse($template->isValidTemplateFilename(__DIR__));
     }
 
-    public function testIsValidTemplateFilenameNotExistent()
+    public function testIsValidTemplateFilenameNotExistent(): void
     {
         $template = new Template();
         $this->assertFalse($template->isValidTemplateFilename(__DIR__ . '/does-not-exists.txt'));
     }
 
-    public function testIsValidTemplateFilenameNotReadable()
+    public function testIsValidTemplateFilenameNotReadable(): void
     {
         $template = new Template();
         $tempfile = tempnam('', '');
+        if (false === $tempfile) {
+            $this->fail('Unable to create a temporary file name');
+        }
         chmod($tempfile, 0);
 
         $this->assertFalse($template->isValidTemplateFilename($tempfile), 'Testing not readable return true');
@@ -41,41 +45,41 @@ class TemplateTest extends TestCase
         unlink($tempfile);
     }
 
-    public function testStaticHello()
+    public function testStaticHello(): void
     {
         $expectedContent = '-- Hello world --';
         $template = new Template();
-        $content = $template->fetch(Utils::samples('hello-world'));
+        $content = $template->fetch($this->samplePath('hello-world'));
         $this->assertEquals($expectedContent, $content);
     }
 
-    public function testDynamicHello()
+    public function testDynamicHello(): void
     {
         $expectedContent = '-- Hello Carlos --';
         $template = new Template();
-        $content = $template->fetch(Utils::samples('hello-somebody'), ['name' => 'Carlos']);
+        $content = $template->fetch($this->samplePath('hello-somebody'), ['name' => 'Carlos']);
         $this->assertEquals($expectedContent, $content);
     }
 
-    public function testFetchDoNotAffectTemplateFilename()
+    public function testFetchDoNotAffectTemplateFilename(): void
     {
         $expectedContent = '-- Hello world --';
         $template = new Template();
-        $content = $template->fetch(Utils::samples('hello-world'), ['templateFilename' => 'x']);
+        $content = $template->fetch($this->samplePath('hello-world'), ['templateFilename' => 'x']);
         $this->assertEquals($expectedContent, $content);
     }
 
-    public function testTemplateWithCallable()
+    public function testTemplateWithCallable(): void
     {
         $expectedContent = '-- Hello CARLOS --';
         $template = new Template();
         $template->callables()->add('x', 'strtoupper');
 
-        $content = $template->fetch(Utils::samples('hello-callable'), ['name' => 'Carlos']);
+        $content = $template->fetch($this->samplePath('hello-callable'), ['name' => 'Carlos']);
         $this->assertEquals($expectedContent, $content);
     }
 
-    public function testWithInvalidTemplateFile()
+    public function testWithInvalidTemplateFile(): void
     {
         $filename = 'non-existent';
         $template = new Template();

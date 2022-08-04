@@ -1,17 +1,22 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates;
 
-class Callables implements \Countable
+use Countable;
+
+class Callables implements Countable
 {
+    /**
+     * @var array<string, callable>
+     */
     private $map = [];
 
     /**
      * Add a function callable to the collection
-     *
-     * @param string $name
-     * @param callable $callable
      */
-    public function add($name, callable $callable)
+    public function add(string $name, callable $callable): void
     {
         $this->map[$name] = $callable;
     }
@@ -19,32 +24,24 @@ class Callables implements \Countable
     /**
      * Return a callable based on the string name
      * If the name is not registered then return NULL
-     *
-     * @param string $name
-     * @return callable|null
      */
-    public function get($name)
+    public function get(string $name): ?callable
     {
-        return array_key_exists($name, $this->map) ? $this->map[$name] : null;
+        return $this->map[$name] ?? null;
     }
 
     /**
      * Return TRUE if the name is registered
-     *
-     * @param string $name
-     * @return bool
      */
-    public function exists($name)
+    public function exists(string $name): bool
     {
-        return array_key_exists($name, $this->map);
+        return isset($this->map[$name]);
     }
 
     /**
      * Remove a registered name from the collection
-     *
-     * @param $name
      */
-    public function remove($name)
+    public function remove(string $name): void
     {
         unset($this->map[$name]);
     }
@@ -52,22 +49,33 @@ class Callables implements \Countable
     /**
      * Call a function by name
      *
-     * @param string $name
-     * @param array $arguments
-     * @return string
+     * @param array<mixed> $arguments
      */
-    public function call($name, array $arguments)
+    public function call(string $name, array $arguments): string
     {
+        /** @var callable():string|null $callable */
         $callable = $this->get($name);
-        return (null !== $callable) ? call_user_func_array($callable, $arguments) : '';
+        if (null === $callable) {
+            return '';
+        }
+
+        $return = call_user_func_array($callable, $arguments);
+
+        if (is_object($return) && is_callable([$return, '__toString'])) {
+            $return = (string) $return;
+        } elseif (is_scalar($return)) {
+            $return = (string) $return;
+        }
+
+        return is_string($return) ? $return : '';
     }
 
     /**
      * Return the names of the registered functions
      *
-     * @return array
+     * @return string[]
      */
-    public function names()
+    public function names(): array
     {
         return array_keys($this->map);
     }
@@ -78,13 +86,20 @@ class Callables implements \Countable
      *
      * @param Plugin[] $plugins
      */
-    public function attachAll(array $plugins)
+    public function attachAll(array $plugins): void
+    {
+        $this->attach(...$plugins);
+    }
+
+    /**
+     * Attach all the functions offered by the plugin
+     *
+     * @param Plugin ...$plugins
+     */
+    public function attach(Plugin ...$plugins): void
     {
         foreach ($plugins as $plugin) {
-            if (! ($plugin instanceof Plugin)) {
-                continue;
-            }
-            $this->attach($plugin);
+            $this->attachPlugin($plugin);
         }
     }
 
@@ -93,10 +108,22 @@ class Callables implements \Countable
      *
      * @param Plugin $plugin
      */
-    public function attach(Plugin $plugin)
+    public function attachPlugin(Plugin $plugin): void
     {
-        foreach ($plugin->getCallablesTable() as $name => $callable) {
-            $this->add($name, [$plugin, $callable]);
+        foreach ($plugin->getCallablesTable() as $name => $methodName) {
+            /** @var callable():string $callable */
+            $callable = [$plugin, $methodName];
+            $this->add($name, $callable);
+        }
+    }
+
+    /**
+     * Detatch all the functions offered by the plugins
+     */
+    public function detach(Plugin ...$plugins): void
+    {
+        foreach ($plugins as $plugin) {
+            $this->detachPlugin($plugin);
         }
     }
 
@@ -105,9 +132,9 @@ class Callables implements \Countable
      *
      * @param Plugin $plugin
      */
-    public function detach(Plugin $plugin)
+    public function detachPlugin(Plugin $plugin): void
     {
-        foreach (array_keys($plugin->getCallablesTable()) as $name) {
+        foreach ($plugin->getCallablesTable() as $name => $_) {
             $this->remove($name);
         }
     }

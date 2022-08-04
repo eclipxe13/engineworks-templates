@@ -1,11 +1,17 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates\Plugins;
 
 use EngineWorks\Templates\Plugin;
 
 class Transliterate implements Plugin
 {
-    public function getCallablesTable()
+    /**
+     * @return array{tr: string}
+     */
+    public function getCallablesTable(): array
     {
         return [
             'tr' => 'transliterate',
@@ -38,20 +44,18 @@ class Transliterate implements Plugin
      * If the encoder is null then uses the default encoder.
      *
      * @param string $message String with elements using '{key}' template
-     * @param array $arguments Key/value array with the replacements
+     * @param array<string, mixed> $arguments Key/value array with the replacements
      * @param callable|null $encoder function to use for encode
-     *
-     * @return string
      */
-    public function transliterate($message, array $arguments = [], callable $encoder = null)
+    public function transliterate(string $message, array $arguments = [], callable $encoder = null): string
     {
         // put message as string
         $message = $this->valueToString($message);
-        // if there are not arguments then exit
-        if ('' === $message || count($arguments) == 0) {
+        // if there are no arguments then exit
+        if ('' === $message || 0 == count($arguments)) {
             return $message;
         }
-        // create encoded arguments (only included if they exists in matches)
+        // create encoded arguments (only included if they exist in matches)
         $encodedArguments = [];
         $encoder = ($encoder) ? : $this->getDefaultEncoder();
         foreach ($arguments as $key => $value) {
@@ -74,10 +78,9 @@ class Transliterate implements Plugin
      * If the keys are duplicated they are removed, therefore,
      * if you need consecutive keys then use array_values function
      *
-     * @param string $message
-     * @return array
+     * @return string[]
      */
-    public function getCurlyBracesKeys($message)
+    public function getCurlyBracesKeys(string $message): array
     {
         if ('' === trim($message)) {
             return [];
@@ -96,9 +99,8 @@ class Transliterate implements Plugin
      * else empty string
      *
      * @param mixed $value
-     * @return string
      */
-    public function valueToString($value)
+    public function valueToString($value): string
     {
         if (is_null($value) || is_scalar($value) || (is_object($value) && is_callable([$value, '__toString']))) {
             return (string) $value;
@@ -113,29 +115,23 @@ class Transliterate implements Plugin
         return '';
     }
 
-    /**
-     * @return callable
-     */
-    public function getDefaultEncoder()
+    public function getDefaultEncoder(): callable
     {
         return $this->defaultEncoder;
     }
 
     /**
-     * @param callable $defaultEncoder
+     * @param callable(string):string $defaultEncoder
      */
-    public function setDefaultEncoder(callable $defaultEncoder)
+    public function setDefaultEncoder(callable $defaultEncoder): void
     {
         $this->defaultEncoder = $defaultEncoder;
     }
 
     /**
      * Function to setup a null encoder
-     *
-     * @param string $string
-     * @return string mixed
      */
-    public static function nullEncoder($string)
+    public static function nullEncoder(string $string): string
     {
         return $string;
     }

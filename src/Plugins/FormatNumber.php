@@ -1,11 +1,18 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates\Plugins;
 
 use EngineWorks\Templates\Plugin;
+use InvalidArgumentException;
 
 class FormatNumber implements Plugin
 {
-    public function getCallablesTable()
+    /**
+     * @return array{fn: string}
+     */
+    public function getCallablesTable(): array
     {
         return [
             'fn' => 'format',
@@ -15,41 +22,34 @@ class FormatNumber implements Plugin
     /** @var int */
     private $defaultDecimals;
 
-    public function __construct($defaultDecimals = 2)
+    public function __construct(int $defaultDecimals = 2)
     {
         $this->setDefaultDecimals($defaultDecimals);
     }
 
     /**
-     * Format a number, if the expression is not a number then uses 0
+     * Format a number, if the expression is not a number, then uses 0
      *
-     * @param int|float $number
+     * @param mixed $number
      * @param int $decimals = $this->defaultDecimals()
-     * @return string
      */
-    public function format($number, $decimals = -1)
+    public function format($number, int $decimals = -1): string
     {
         if ($decimals < 0) {
             $decimals = $this->getDefaultDecimals();
         }
-        return number_format(is_numeric($number) ? $number : 0, $decimals);
+        return number_format(is_numeric($number) ? (float) $number : 0, $decimals);
     }
 
-    /**
-     * @return int
-     */
-    public function getDefaultDecimals()
+    public function getDefaultDecimals(): int
     {
         return $this->defaultDecimals;
     }
 
-    /**
-     * @param int $defaultDecimals
-     */
-    public function setDefaultDecimals($defaultDecimals)
+    public function setDefaultDecimals(int $defaultDecimals): void
     {
-        if (! is_int($defaultDecimals) || $defaultDecimals < 0) {
-            throw new \InvalidArgumentException('The default decimals argument is not an integer greater than zero');
+        if ($defaultDecimals < 0) {
+            throw new InvalidArgumentException('The default decimals argument is not an integer greater than zero');
         }
         $this->defaultDecimals = $defaultDecimals;
     }

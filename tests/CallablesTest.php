@@ -1,12 +1,14 @@
 <?php
+
+declare(strict_types=1);
+
 namespace EngineWorks\Templates\Tests;
 
 use EngineWorks\Templates\Callables;
 use EngineWorks\Templates\Plugins\HtmlEscape;
 use EngineWorks\Templates\Plugins\Transliterate;
-use PHPUnit\Framework\TestCase;
 
-class CallablesTest extends TestCase
+final class CallablesTest extends TestCase
 {
     /** @var Callables */
     private $callables;
@@ -16,53 +18,53 @@ class CallablesTest extends TestCase
         $this->callables = new Callables();
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $this->assertSame([], $this->callables->names());
     }
 
-    public function testExists()
+    public function testExists(): void
     {
         $this->callables->add('x', 'strtoupper');
         $this->assertFalse($this->callables->exists('y'));
         $this->assertTrue($this->callables->exists('x'));
     }
 
-    public function testAddUsingFunctionName()
+    public function testAddUsingFunctionName(): void
     {
         $this->callables->add('x', 'strtoupper');
         $this->callables->add('y', 'strtolower');
         $this->assertCount(2, $this->callables);
     }
 
-    public function testAddUsingStaticMethod()
+    public function testAddUsingStaticMethod(): void
     {
         $this->callables->add('x', [\DateTime::class, 'createFromFormat']);
         $this->assertTrue($this->callables->exists('x'));
     }
 
-    public function testAddUsingObjectMethod()
+    public function testAddUsingObjectMethod(): void
     {
         $this->callables->add('x', [$this, 'testAddUsingObjectMethod']);
         $this->assertTrue($this->callables->exists('x'));
     }
 
-    public function testAddUsingClousure()
+    public function testAddUsingClousure(): void
     {
-        $this->callables->add('x', function () {
+        $this->callables->add('x', function (): void {
             return;
         });
         $this->assertTrue($this->callables->exists('x'));
     }
 
-    public function testNames()
+    public function testNames(): void
     {
         $this->callables->add('x', 'strtoupper');
         $this->callables->add('y', 'ucfirst');
         $this->assertSame(['x', 'y'], $this->callables->names());
     }
 
-    public function testRemove()
+    public function testRemove(): void
     {
         // populate
         $this->callables->add('x', 'strtoupper');
@@ -77,14 +79,14 @@ class CallablesTest extends TestCase
         $this->assertCount(0, $this->callables);
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->callables->add('x', 'strtoupper');
         $this->assertNotNull($this->callables->get('x'));
         $this->assertNull($this->callables->get('y'));
     }
 
-    public function testAttachAll()
+    public function testAttachAll(): void
     {
         $html = new HtmlEscape();
         $transliterate = new Transliterate();
@@ -95,16 +97,12 @@ class CallablesTest extends TestCase
 
         $this->callables->attachAll([
             $html,
-            null,
             $transliterate,
-            new \stdClass(),
-            [],
-            123,
         ]);
         $this->assertEquals($expectedTable, $this->callables->names());
     }
 
-    public function testAttachDetach()
+    public function testAttachDetach(): void
     {
         $plugin = new HtmlEscape();
         $this->callables->attach($plugin);
@@ -113,7 +111,7 @@ class CallablesTest extends TestCase
         $this->assertCount(0, $this->callables);
     }
 
-    public function testCall()
+    public function testCall(): void
     {
         $parameter = 'Foo Bar';
         $expected = 'FOO BAR';
