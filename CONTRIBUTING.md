@@ -62,8 +62,10 @@ This project include a `phpcs.xml` file that extends the PSR-2 rules.
 
 ```bash
 # find issues
+tools/php-cs-fixer fix --dry-run
 tools/phpcs -sp --colors
 # fix sources and tests
+tools/php-cs-fixer fix
 tools/phpcbf -sp --colors
 ```
 
@@ -79,9 +81,10 @@ The following tests must pass before we will accept a pull request. If any of th
 it will result in a complete build failure. Before you can run these, be sure to `composer install`.
 
 ```
-./tools/phpcs --colors -sp
-./vendor/bin/phpunit --testdox
-./tools/phpstan analyse
+tools/php-cs-fixer fix --dry-run
+tools/phpcs --colors -sp
+vendor/bin/phpunit --testdox
+tools/phpstan analyse
 ```
 
 Or simply execute:
